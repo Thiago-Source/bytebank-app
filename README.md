@@ -1,16 +1,41 @@
-# bytebank_app
+# Bytebank App
 
-A new Flutter project.
+App sendo produzido como projeto da Formação Flutter da Alura
 
-## Getting Started
+## Objetivo do projeto
 
-This project is a starting point for a Flutter application.
+Este projeto segue o cronograma da Formação Flutter, fornecida pela Alura.
+O projeto está sendo produzido com o intuito de aprender e praticar conceitos essenciais no Flutter (que serão listados mais abaixo).
+Este repositório será atualizado a medida que vou progredindo no curso.
 
-A few resources to get you started if this is your first Flutter project:
+Algumas coisas foram alteradas por mim para deixar com gostos mais próximos aos meus e também com o fim de explorar mais a fundo, mas naada foi desviado do conteúdo ensinado e nem das boas práticas.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<hr>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🏆📜 Skills e conceitos aplicados até o momento
+* Importação de imagens assets
+* Uso de temas
+* Navegação por Material Page Route
+* Uso de set state
+* Programação assíncrona e Future Builder
+* Persistência de dados com SQLite utilizando SQFlite
+  * Operação CREATE TABLE
+  * Operação INSERT
+  * Operação QUERY
+* Separação de regras de negócio utilizando Data Access Object
+
+### Skills e conceitos a serem implementados
+* Finalização do CRUD com SQFlite (faltam: Update e Delete)
+* Navegação por rotas nomeadas
+* Integração com web API e comunicação http
+* Comunicação com Firebase e Firebase Crashlytics
+* Gerenciamento de estados
+* Programação reativa com BLoC
+* Internacionalização
+* Testes de Unidade e de Widget
+
+## 🖼 Atuais telas do projeto
+![image](https://user-images.githubusercontent.com/85903292/134443622-2ef5dfc1-afda-462a-afa2-d47cbb922e3a.png)
+![image](https://user-images.githubusercontent.com/85903292/134443693-208f9900-3f90-4b09-ba16-0a1758507dd7.png)
+![image](https://user-images.githubusercontent.com/85903292/134443755-608f93f0-22ab-47bd-ab23-1084f9801485.png)
+![image](https://user-images.githubusercontent.com/85903292/134443732-13a4d893-1bc2-44dc-a592-909f48966c04.png)

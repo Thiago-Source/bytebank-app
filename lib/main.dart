@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'pages/home_page.dart';
+import 'ui/pages/home_page.dart';
 
 void main() {
   runApp(const BytebankApp());
@@ -20,6 +19,7 @@ class BytebankApp extends StatelessWidget {
         colorScheme: theme.colorScheme.copyWith(
           primary: Colors.green[600],
           secondary: Colors.blueAccent,
+          primaryVariant: Colors.greenAccent.shade700,
         ),
         buttonTheme: const ButtonThemeData(
           buttonColor: Colors.greenAccent,

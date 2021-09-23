@@ -1,7 +1,8 @@
 import 'package:bytebank_app/database/dao/contacts_dao.dart';
 import 'package:bytebank_app/models/contact_model.dart';
-import 'package:bytebank_app/pages/add_contact_form_page.dart';
 import 'package:flutter/material.dart';
+
+import 'add_contact_form_page.dart';
 
 class ContactList extends StatefulWidget {
   const ContactList({Key? key}) : super(key: key);

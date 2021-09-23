@@ -7,7 +7,6 @@ class AppDatabase {
     final String path = join(await getDatabasesPath(), 'bytebank.db');
     return await openDatabase(path, onCreate: (db, version) {
       db.execute(ContactsDao.createDatabase);
-    }, version: 1);
+    }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
-
 }

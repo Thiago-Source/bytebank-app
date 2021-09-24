@@ -1,5 +1,6 @@
 import 'package:bytebank_app/database/dao/contacts_dao.dart';
 import 'package:bytebank_app/models/contact_model.dart';
+import 'package:bytebank_app/ui/pages/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 import 'add_contact_form_page.dart';
@@ -34,6 +35,11 @@ class _ContactListState extends State<ContactList> {
                 itemCount: contacts.length,
                 itemBuilder: (context, index) => Card(
                   child: ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              TransactionForm(contacts[index])));
+                    },
                     title: Text(contacts[index].nome),
                     subtitle: Text(
                       contacts[index].numero.toString(),
@@ -56,7 +62,8 @@ class _ContactListState extends State<ContactList> {
           Navigator.of(context)
               .push(
             MaterialPageRoute(builder: (context) => AddContactFormPage()),
-          ).then((value) {
+          )
+              .then((value) {
             setState(() {});
           });
         },

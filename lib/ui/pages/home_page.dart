@@ -1,3 +1,4 @@
+import 'package:bytebank_app/ui/pages/transactions_list_page.dart';
 import 'package:flutter/material.dart';
 import 'contact_list_page.dart';
 import '../widgets/feature_button_widget.dart';
@@ -42,7 +43,13 @@ class HomePage extends StatelessWidget {
                     icon: Icons.description,
                     label: 'Histórico de transações',
                     color: Theme.of(context).colorScheme.primaryVariant,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const TransactionsList(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

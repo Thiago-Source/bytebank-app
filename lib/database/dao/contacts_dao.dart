@@ -24,13 +24,10 @@ class ContactsDao {
 
   Future<List<ContactModel>> queryAllContacts() async {
     final Database db = await _appDatabase.createDatabase();
-    final List<Map<String, Object?>> result = await db.query(_tableName);
-    final List<ContactModel> contactList = [];
-    for (Map<String, dynamic> contact in result) {
-      final newContact = ContactModel.fromMap(contact);
-      contactList.add(newContact);
-    }
-
+    final List<Map<String, Object?>> results = await db.query(_tableName);
+    final List<ContactModel> contactList = results.map((result) {
+      return ContactModel.fromMap(result);
+    }).toList();
     return contactList;
   }
 }

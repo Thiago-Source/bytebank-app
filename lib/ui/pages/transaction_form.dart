@@ -1,5 +1,6 @@
 import 'package:bytebank_app/models/contact_model.dart';
 import 'package:bytebank_app/models/transaction_model.dart';
+import 'package:bytebank_app/ui/widgets/auth_dialog.dart';
 import 'package:bytebank_app/web_api/web_clients/transaction_web_client.dart';
 import 'package:flutter/material.dart';
 
@@ -64,8 +65,17 @@ class _TransactionFormState extends State<TransactionForm> {
                       final double value = double.parse(_valueController.text);
                       final transactionCreated =
                           Transaction(value, widget.contact);
-
-                      await _webClient.postTransaction(transactionCreated);
+                      await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AuthDialog(
+                            onTap: (String password) async {
+                              await _webClient.postTransaction(
+                                  transactionCreated, password);
+                            },
+                          );
+                        },
+                      );
                       Navigator.pop(context);
                     },
                   ),

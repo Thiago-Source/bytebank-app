@@ -1,3 +1,4 @@
+import 'package:bytebank_app/ui/widgets/centered_message.dart';
 import 'package:bytebank_app/ui/widgets/transaction_card.dart';
 import 'package:bytebank_app/web_api/web_clients/transaction_web_client.dart';
 import '../../models/transaction_model.dart';
@@ -43,19 +44,18 @@ class _TransactionsListState extends State<TransactionsList> {
                     },
                     itemCount: transactions.length,
                   );
+                } else {
+                  return const CenteredMessage('Sem transações',
+                      icon: Icons.warning);
                 }
               }
               break;
             default:
               const CircularProgressIndicator();
           }
-          return const Center(
-            child: Text('Erro desconhecido! =('),
-          );
+          return const CenteredMessage('Erro desconhecido');
         },
       ),
     );
   }
 }
-
-

@@ -23,12 +23,13 @@ class TransactionWebClient {
     return transactionsList;
   }
 
-  Future<Transaction> postTransaction(Transaction transaction) async {
+  Future<Transaction> postTransaction(
+      Transaction transaction, String password) async {
     final http.Response response = await _webClient.client.post(
       Uri.parse(WebClient.baseUrl),
       headers: {
         'Content-type': 'application/json',
-        'password': '1000',
+        'password': password,
       },
       body: jsonEncode(transaction.toMap()),
     );

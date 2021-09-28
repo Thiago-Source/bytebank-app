@@ -1,4 +1,3 @@
-import 'package:bytebank_app/models/contact_model.dart';
 import 'package:bytebank_app/models/transaction_model.dart';
 import 'package:bytebank_app/web_api/web_client.dart';
 import 'package:http/http.dart' as http;
@@ -8,13 +7,9 @@ class TransactionWebClient {
   final WebClient _webClient = WebClient();
 
   Future<List<Transaction>> getAll() async {
-    final http.Response response = await _webClient.client
-        .get(
-          Uri.parse(WebClient.baseUrl),
-        )
-        .timeout(
-          const Duration(seconds: 5),
-        );
+    final http.Response response = await _webClient.client.get(
+      Uri.parse(WebClient.baseUrl),
+    );
     final List<dynamic> jsonDecoded = jsonDecode(response.body);
     final List<Transaction> transactionsList = jsonDecoded.map((json) {
       return Transaction.fromMap(json);
@@ -33,13 +28,29 @@ class TransactionWebClient {
       },
       body: jsonEncode(transaction.toMap()),
     );
-    final transactionJson = jsonDecode(response.body);
-    return Transaction(
-      transactionJson['value'],
-      ContactModel(
-        nome: transactionJson['contact']['name'],
-        numero: transactionJson['contact']['accountNumber'],
-      ),
-    );
+
+    if (response.statusCode == 200) {
+      final transactionJson = jsonDecode(response.body);
+      return Transaction.fromMap(transactionJson);
+    }
+    throw HttpException(_getErrorMessage(response.statusCode));
   }
+  static final Map<int, String> _statusResponses = {
+    400: 'Erro 400: Valor de transferência inválida',
+    401: 'Erro 401: Autenticação inválida',
+    409: 'Erro 409: Id da transferência já existe',
+  };
+
+  String _getErrorMessage(int statusCode){
+    if(_statusResponses.containsKey(statusCode)){
+      return _statusResponses[statusCode]!;
+    }
+    return 'Erro desconhecido =(';
+  }
+}
+
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
 }

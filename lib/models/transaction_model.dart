@@ -1,10 +1,12 @@
 import 'contact_model.dart';
 
 class Transaction {
+  String? id;
   final double value;
   final ContactModel contact;
 
   Transaction(
+    this.id,
     this.value,
     this.contact,
   );
@@ -16,6 +18,7 @@ class Transaction {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'value': value,
       'contact': {
         'name': contact.nome,
@@ -26,6 +29,7 @@ class Transaction {
 
   factory Transaction.fromMap(Map<String, dynamic> map) {
     return Transaction(
+      map['id'],
       map['value'],
       ContactModel(
         nome: map['contact']['name'],

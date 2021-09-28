@@ -1,8 +1,11 @@
+import 'package:bytebank_app/blocs/transactions_bloc.dart';
 import 'package:bytebank_app/models/contact_model.dart';
 import 'package:bytebank_app/models/transaction_model.dart';
 import 'package:bytebank_app/ui/widgets/auth_dialog.dart';
-import 'package:bytebank_app/web_api/web_clients/transaction_web_client.dart';
+import 'package:bytebank_app/ui/widgets/response_dialog.dart';
+import 'package:bytebank_app/ui/widgets/transaction_form_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final ContactModel contact;
@@ -15,7 +18,9 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
-  final TransactionWebClient _webClient = TransactionWebClient();
+  final TransactionBloc _transactionBloc = TransactionBloc();
+  final String transactionId = const Uuid().v4();
+  bool isSending = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +34,10 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                widget.contact.nome,
-                style: const TextStyle(
-                  fontSize: 24.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
-                  widget.contact.numero.toString(),
-                  style: const TextStyle(
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: TextField(
-                  controller: _valueController,
-                  style: const TextStyle(fontSize: 24.0),
-                  decoration: const InputDecoration(labelText: 'Value'),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
+              TransactionFormWidget(
+                  widget: widget,
+                  valueController: _valueController,
+                  transactionId: transactionId),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: SizedBox(
@@ -62,25 +45,51 @@ class _TransactionFormState extends State<TransactionForm> {
                   child: ElevatedButton(
                     child: const Text('Transfer'),
                     onPressed: () async {
-                      final double value = double.parse(_valueController.text);
-                      final transactionCreated =
-                          Transaction(value, widget.contact);
-                      await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AuthDialog(
-                            onTap: (String password) async {
-                              await _webClient.postTransaction(
-                                  transactionCreated, password);
-                            },
-                          );
-                        },
-                      );
-                      Navigator.pop(context);
+                      if (_valueController.text.isNotEmpty) {
+                        final double value =
+                            double.parse(_valueController.text);
+                        final transactionCreated =
+                            Transaction(transactionId, value, widget.contact);
+                        showDialog(
+                          context: context,
+                          builder: (contextDialog) {
+                            return AuthDialog(
+                              onTap: (String password) async {
+                                setState(() {
+                                  isSending = true;
+                                });
+                                await _transactionBloc.saveTransaction(
+                                    transactionCreated, password, context);
+                              },
+                            );
+                          },
+                        );
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const FailureDialog(
+                                  'O valor não pode ser nulo!');
+                            });
+                      }
+                      setState(() {
+                        isSending = false;
+                      });
                     },
                   ),
                 ),
-              )
+              ),
+              Visibility(
+                visible: isSending,
+                child: Center(
+                  child: Column(
+                    children: const [
+                      CircularProgressIndicator(),
+                      Text('Carregando...'),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

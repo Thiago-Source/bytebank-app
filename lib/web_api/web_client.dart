@@ -7,8 +7,7 @@ class WebClient {
 
   final http.Client client = InterceptedClient.build(
     interceptors: [LoggingInterceptor()],
+    requestTimeout: const Duration(seconds: 5),
   );
   WebClient();
-
-  
 }

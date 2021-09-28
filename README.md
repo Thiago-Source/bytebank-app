@@ -18,16 +18,18 @@ Algumas coisas foram alteradas por mim para deixar com gostos mais próximos aos
 * Navegação por Material Page Route
 * Uso de set state
 * Programação assíncrona e Future Builder
+* Separação de regra de negócio e DAO
 * Persistência de dados com SQLite utilizando SQFlite
   * Operação CREATE TABLE
   * Operação INSERT
   * Operação QUERY
 * Separação de regras de negócio utilizando Data Access Object
+* Integração com web API e comunicação http
+* Tratamento de erros e feedback ao usuário
 
 ### Skills e conceitos a serem implementados
 * Finalização do CRUD com SQFlite (faltam: Update e Delete)
 * Navegação por rotas nomeadas
-* Integração com web API e comunicação http
 * Comunicação com Firebase e Firebase Crashlytics
 * Gerenciamento de estados
 * Programação reativa com BLoC
@@ -35,7 +37,9 @@ Algumas coisas foram alteradas por mim para deixar com gostos mais próximos aos
 * Testes de Unidade e de Widget
 
 ## 🖼 Atuais telas do projeto
-![image](https://user-images.githubusercontent.com/85903292/134443622-2ef5dfc1-afda-462a-afa2-d47cbb922e3a.png)
-![image](https://user-images.githubusercontent.com/85903292/134443693-208f9900-3f90-4b09-ba16-0a1758507dd7.png)
-![image](https://user-images.githubusercontent.com/85903292/134443755-608f93f0-22ab-47bd-ab23-1084f9801485.png)
-![image](https://user-images.githubusercontent.com/85903292/134443732-13a4d893-1bc2-44dc-a592-909f48966c04.png)
+![image](https://user-images.githubusercontent.com/85903292/135146507-37826748-bcf8-4c19-b15a-377c7113098e.png)
+![image](https://user-images.githubusercontent.com/85903292/135146677-14459f9d-5ad0-4ddf-b6a4-c560016f998c.png)
+![image](https://user-images.githubusercontent.com/85903292/135146696-74bd8859-4aa5-477b-bebc-0b7c604b3bcf.png)
+![image](https://user-images.githubusercontent.com/85903292/135146730-638cf249-8b4a-44fe-b586-57609d206db8.png)
+![image](https://user-images.githubusercontent.com/85903292/135146746-335ca1f7-d3e3-4aaa-85fb-23fbe47e1f84.png)
+

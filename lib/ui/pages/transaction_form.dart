@@ -1,3 +1,4 @@
+import 'package:bytebank_app/blocs/container/container.dart';
 import 'package:bytebank_app/blocs/transactions_bloc.dart';
 import 'package:bytebank_app/models/contact_model.dart';
 import 'package:bytebank_app/models/transaction_model.dart';
@@ -5,22 +6,83 @@ import 'package:bytebank_app/ui/widgets/auth_dialog.dart';
 import 'package:bytebank_app/ui/widgets/response_dialog.dart';
 import 'package:bytebank_app/ui/widgets/transaction_form_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
-class TransactionForm extends StatefulWidget {
-  final ContactModel contact;
-
-  const TransactionForm(this.contact, {Key? key}) : super(key: key);
-
-  @override
-  _TransactionFormState createState() => _TransactionFormState();
+abstract class TransactionFormState {
+  const TransactionFormState();
 }
 
-class _TransactionFormState extends State<TransactionForm> {
-  final TextEditingController _valueController = TextEditingController();
+class SendingState extends TransactionFormState {
+  const SendingState();
+}
+
+class ShowingFormState extends TransactionFormState {
+  const ShowingFormState();
+}
+
+class SentState extends TransactionFormState {
+  const SentState();
+}
+
+class ErrorState extends TransactionFormState {
+  final String message = "Error";
+  const ErrorState();
+}
+
+class TransactionFormCubit extends Cubit<TransactionFormState> {
+  TransactionFormCubit() : super(const ShowingFormState());
+}
+
+class TransactionFormContainer extends BlocContainer {
+  final ContactModel contact;
+  const TransactionFormContainer(this.contact, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<TransactionFormCubit>(
+      create: (BuildContext context) {
+        return TransactionFormCubit();
+      },
+      child: TransactionForm(contact),
+    );
+  }
+}
+
+class TransactionForm extends StatelessWidget {
+  final ContactModel contact;
+
+  TransactionForm(this.contact, {Key? key}) : super(key: key);
   final TransactionBloc _transactionBloc = TransactionBloc();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TransactionFormCubit, TransactionFormState>(
+      builder: (context, state) {
+        if (state is SendingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is SentState) {
+          Navigator.pop(context);
+        }
+
+        if (state is ShowingFormState) {
+          return BasicForm(_transactionBloc, contact);
+        }
+
+        return const Center(child: Text("Erro!!"));
+      },
+    );
+  }
+}
+
+class BasicForm extends StatelessWidget {
+  final TextEditingController _valueController = TextEditingController();
   final String transactionId = const Uuid().v4();
-  bool isSending = false;
+  final TransactionBloc transactionBloc;
+  final ContactModel contact;
+  BasicForm(this.transactionBloc, this.contact, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +97,7 @@ class _TransactionFormState extends State<TransactionForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TransactionFormWidget(
-                  widget: widget,
+                  contact: contact,
                   valueController: _valueController,
                   transactionId: transactionId),
               Padding(
@@ -49,16 +111,13 @@ class _TransactionFormState extends State<TransactionForm> {
                         final double value =
                             double.parse(_valueController.text);
                         final transactionCreated =
-                            Transaction(transactionId, value, widget.contact);
+                            Transaction(transactionId, value, contact);
                         showDialog(
                           context: context,
                           builder: (contextDialog) {
                             return AuthDialog(
                               onTap: (String password) async {
-                                setState(() {
-                                  isSending = true;
-                                });
-                                await _transactionBloc.saveTransaction(
+                                await transactionBloc.saveTransaction(
                                     transactionCreated, password, context);
                               },
                             );
@@ -72,21 +131,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                   'O valor não pode ser nulo!');
                             });
                       }
-                      setState(() {
-                        isSending = false;
-                      });
                     },
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: isSending,
-                child: Center(
-                  child: Column(
-                    children: const [
-                      CircularProgressIndicator(),
-                      Text('Carregando...'),
-                    ],
                   ),
                 ),
               ),

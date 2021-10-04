@@ -46,7 +46,8 @@ class BytebankApp extends StatelessWidget {
           backgroundColor: Colors.greenAccent.shade700,
         ),
       ),
-      home: const HomePage(),
+      home: const HomeContainer(),
     );
   }
 }
+
